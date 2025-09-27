@@ -1,5 +1,8 @@
 import { defineAbilityFor } from '@repair/auth'
 
-const ability = defineAbilityFor({ role: 'ADMIN' })
+const ability = defineAbilityFor({
+  id: '1',
+  role: 'MEMBER',
+})
 
-console.log(ability.can('invite', 'User'))
+console.log(ability.can('get', 'User'))
