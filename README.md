@@ -1,9 +1,3 @@
-Claro\! A secção de Contactos foi atualizada com o seu nome, GitHub e LinkedIn.
-
-Pode copiar o texto abaixo e guardá-lo como `README.md` para *download*.
-
------
-
 # 🛠️ Sistema de Gestão de Reparadores de Eletrodomésticos
 
 Um sistema moderno e eficaz, desenvolvido num **monorepo**, concebido para otimizar o fluxo de trabalho de empresas de reparação de eletrodomésticos, desde a marcação de serviços até à gestão de técnicos e peças.
