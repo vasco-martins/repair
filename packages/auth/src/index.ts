@@ -9,6 +9,9 @@ import { inviteSubject } from './subjects/invite'
 import { organizationSubject } from './subjects/organization'
 import { userSubject } from './subjects/user'
 
+export * from './models/organization'
+export * from './models/user'
+
 const appAbilitiesSchema = z.union([
   billingSubject,
   organizationSubject,
@@ -32,7 +35,11 @@ export function defineAbilityFor(user: User) {
 
   permissions[user.role](user, builder)
 
-  const ability = builder.build()
+  const ability = builder.build({
+    detectSubjectType(subject) {
+      return '__typename' in subject ? subject.__typename : 'User'
+    },
+  })
 
   return ability
 }
