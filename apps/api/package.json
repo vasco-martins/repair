@@ -1,0 +1,25 @@
+{
+    "name": "@repair/api",
+    "version": "1.0.0",
+    "private": true,
+
+    "scripts": {
+        "dev": "tsx watch src/index.ts"
+    },
+
+    "dependencies": {
+        "@repair/auth": "workspace:*"
+    },
+
+    "devDependencies": {
+        "@repair/eslint-config": "workspace:*",
+        "@repair/prettier": "workspace:*",
+        "@repair/tsconfig": "workspace:*",
+        "@types/node": "^24.5.2",
+        "tsx": "^4.20.6"
+    },
+    "prettier": "@repair/prettier",
+    "eslintConfig": {
+        "extends": "@repair/eslint-config/node"
+    }
+}

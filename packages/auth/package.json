@@ -1,0 +1,21 @@
+{
+    "name": "@repair/auth",
+    "version": "0.0.0",
+    "private": true,
+    "main": "src/index.ts",
+    "types": "src/index.ts",
+    "devDependencies": {
+        "@repair/eslint-config": "workspace:*",
+        "@repair/prettier": "workspace:*",
+        "@repair/tsconfig": "workspace:*"
+    },
+    "eslintConfig": {
+        "extends": [
+            "@repair/eslint-config/library"
+        ]
+    },
+    "prettier": "@repair/prettier",
+    "dependencies": {
+        "@casl/ability": "^6.7.3"
+    }
+}

@@ -1,0 +1,4 @@
+{
+    "extends": "@repair/tsconfig/node.json",
+    "include": ["src/**/*"],
+}
