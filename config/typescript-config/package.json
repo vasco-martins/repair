@@ -8,6 +8,7 @@
   },
   "files": [
     "library.json",
-    "node.json"
+    "node.json",
+    "nextjs.json"
   ]
 }
