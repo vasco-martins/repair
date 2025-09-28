@@ -15,12 +15,16 @@
         "zod": "^4.1.11"
     },
     "devDependencies": {
+        "@faker-js/faker": "^10.0.0",
         "@repair/eslint-config": "workspace:*",
         "@repair/prettier": "workspace:*",
         "@repair/tsconfig": "workspace:*",
         "@types/node": "^24.5.2",
         "prisma": "^6.16.2",
         "tsx": "^4.20.6"
+    },
+    "prisma": {
+        "seed": "tsx prisma/seed.ts"
     },
     "prettier": "@repair/prettier",
     "eslintConfig": {
