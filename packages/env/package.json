@@ -1,0 +1,23 @@
+{
+    "name": "@repair/env",
+    "version": "0.0.0",
+    "private": true,
+    "main": "index.ts",
+    "types": "index.ts",
+    "devDependencies": {
+        "@repair/eslint-config": "workspace:*",
+        "@repair/prettier": "workspace:*",
+        "@repair/tsconfig": "workspace:*",
+        "@types/node": "^24.5.2"
+    },
+    "eslintConfig": {
+        "extends": [
+            "@repair/eslint-config/library"
+        ]
+    },
+    "prettier": "@repair/prettier",
+    "dependencies": {
+        "@t3-oss/env-nextjs": "^0.13.8",
+        "zod": "^4.1.11"
+    }
+}
