@@ -1,4 +1,10 @@
 {
     "extends": "@repair/tsconfig/node.json",
     "include": ["src/**/*"],
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["./src/*"]
+        }
+    }
 }
