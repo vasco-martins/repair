@@ -11,6 +11,7 @@ export const auth = fastifyPlugin((app: FastifyInstance) => {
 
         return sub
       } catch (error) {
+        console.error(error)
         throw new UnauthorizedError('Invalid auth token.')
       }
     }

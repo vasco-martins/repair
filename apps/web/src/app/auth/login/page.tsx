@@ -1,45 +1,35 @@
 'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { AlertTriangle } from 'lucide-react'
 import Head from 'next/head'
 import Link from 'next/link'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { useActionState } from 'react'
 
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import {
-  Form,
-  FormControl,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
-const formSchema = z.object({
-  email: z.email('O email é obrigatório'),
-  password: z
-    .string()
-    .min(8, 'A palavra-passe deve conter pelo menos 8 caracteres'),
-})
+import { SignInWithEmailAndPassword } from './actions'
+
 export default function LoginPage() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-  })
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
-  }
+  const [state, formAction, isPending] = useActionState(
+    SignInWithEmailAndPassword,
+    { success: false, message: null, errors: null },
+  )
   return (
     <>
       <Head>
         <title>Login - Repair</title>
       </Head>
+      {state.success === false && state.message && (
+        <Alert variant="destructive" className="mb-4">
+          <AlertTriangle className="size-4" />
+          <AlertTitle>Erro ao iniciar sessão</AlertTitle>
+          <AlertDescription>{state.message}</AlertDescription>
+        </Alert>
+      )}
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-center">
@@ -50,39 +40,34 @@ export default function LoginPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input type="email" placeholder="Introduza o seu email" />
-                </FormControl>
-                {form.formState.errors.email && (
-                  <FormMessage>
-                    {form.formState.errors.email.message}
-                  </FormMessage>
-                )}
-              </FormItem>
-              <FormItem>
-                <FormLabel>Palavra-passe</FormLabel>
-                <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="Insira a sua palavra-passe"
-                  />
-                </FormControl>
-                {form.formState.errors.password && (
-                  <FormMessage>
-                    {form.formState.errors.password.message}
-                  </FormMessage>
-                )}
-              </FormItem>
+          <form action={formAction} className="space-y-4">
+            <Label>Email</Label>
+            <Input
+              type="email"
+              name="email"
+              placeholder="Introduza o seu email"
+            />
+            {state.errors?.email && (
+              <p className="text-destructive text-sm">
+                {state.errors.email.errors[0]}
+              </p>
+            )}
+            <Label>Palavra-passe</Label>
+            <Input
+              type="password"
+              name="password"
+              placeholder="Insira a sua palavra-passe"
+            />
+            {state.errors?.password && (
+              <p className="text-destructive text-sm">
+                {state.errors.password.errors[0]}
+              </p>
+            )}
 
-              <Button type="submit" className="w-full">
-                Entrar
-              </Button>
-            </form>
-          </Form>
+            <Button type="submit" className="w-full" disabled={isPending}>
+              Entrar
+            </Button>
+          </form>
           <div className="mt-4 flex justify-center">
             <Link
               href="/auth/register"
