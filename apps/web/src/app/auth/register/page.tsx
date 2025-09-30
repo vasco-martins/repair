@@ -1,56 +1,35 @@
 'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { AlertTriangle } from 'lucide-react'
 import Head from 'next/head'
 import Link from 'next/link'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { useActionState } from 'react'
 
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import {
-  Form,
-  FormControl,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
-const formSchema = z
-  .object({
-    name: z.string().min(6, 'O nome deve conter pelo menos 6 caracteres'),
-    email: z.email('O email é obrigatório'),
-    password: z
-      .string()
-      .min(8, 'A palavra-passe deve conter pelo menos 8 caracteres'),
-    confirmPassword: z
-      .string()
-      .min(8, 'A palavra-passe deve conter pelo menos 8 caracteres'),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    path: ['confirmPassword'],
-    message: 'As palavras-passe não coincidem',
-  })
+import { SignUpWithPasswordAction } from './action'
+
 export default function RegisterPage() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-    },
-  })
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
-  }
+  const [state, formAction, isPending] = useActionState(
+    SignUpWithPasswordAction,
+    { success: false, message: null, errors: null },
+  )
   return (
     <>
       <Head>
         <title>Register - Repair</title>
       </Head>
+      {state.success === false && state.message && (
+        <Alert variant="destructive" className="mb-4">
+          <AlertTriangle className="size-4" />
+          <AlertTitle>Erro ao criar a conta</AlertTitle>
+          <AlertDescription>{state.message}</AlertDescription>
+        </Alert>
+      )}
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-center">
@@ -61,77 +40,51 @@ export default function RegisterPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormItem>
-                <FormLabel>Nome</FormLabel>
-                <FormControl>
-                  <Input
-                    {...form.register('name')}
-                    name="name"
-                    type="name"
-                    placeholder="Introduza o seu nome"
-                  />
-                </FormControl>
-                {form.formState.errors.name && (
-                  <FormMessage>
-                    {form.formState.errors.name.message}
-                  </FormMessage>
-                )}
-              </FormItem>
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    {...form.register('email')}
-                    name="email"
-                    type="email"
-                    placeholder="Introduza o seu email"
-                  />
-                </FormControl>
-                {form.formState.errors.email && (
-                  <FormMessage>
-                    {form.formState.errors.email.message}
-                  </FormMessage>
-                )}
-              </FormItem>
-              <FormItem>
-                <FormLabel>Palavra-passe</FormLabel>
-                <FormControl>
-                  <Input
-                    {...form.register('password')}
-                    name="password"
-                    type="password"
-                    placeholder="Insira a sua palavra-passe"
-                  />
-                </FormControl>
-                {form.formState.errors.password && (
-                  <FormMessage>
-                    {form.formState.errors.password.message}
-                  </FormMessage>
-                )}
-              </FormItem>
-              <FormItem>
-                <FormLabel>Confirmar palavra-passe</FormLabel>
-                <FormControl>
-                  <Input
-                    {...form.register('confirmPassword')}
-                    name="confirmPassword"
-                    type="password"
-                    placeholder="Insira a sua palavra-passe"
-                  />
-                </FormControl>
-                {form.formState.errors.confirmPassword && (
-                  <FormMessage>
-                    {form.formState.errors.confirmPassword.message}
-                  </FormMessage>
-                )}
-              </FormItem>
-              <Button type="submit" className="w-full">
-                Registar
-              </Button>
-            </form>
-          </Form>
+          <form action={formAction} className="space-y-4">
+            <Label>Nome</Label>
+            <Input name="name" type="name" placeholder="Introduza o seu nome" />
+            {state.errors?.name && (
+              <p className="text-destructive text-sm">
+                {state.errors.name.errors[0]}
+              </p>
+            )}
+            <Label>Email</Label>
+            <Input
+              name="email"
+              type="email"
+              placeholder="Introduza o seu email"
+            />
+            {state.errors?.email && (
+              <p className="text-destructive text-sm">
+                {state.errors.email.errors[0]}
+              </p>
+            )}
+            <Label>Palavra-passe</Label>
+            <Input
+              name="password"
+              type="password"
+              placeholder="Insira a sua palavra-passe"
+            />
+            {state.errors?.password && (
+              <p className="text-destructive text-sm">
+                {state.errors.password.errors[0]}
+              </p>
+            )}
+            <Label>Confirmar palavra-passe</Label>
+            <Input
+              name="confirmPassword"
+              type="password"
+              placeholder="Insira a sua palavra-passe"
+            />
+            {state.errors?.confirmPassword && (
+              <p className="text-destructive text-sm">
+                {state.errors.confirmPassword.errors[0]}
+              </p>
+            )}
+            <Button type="submit" className="w-full" disabled={isPending}>
+              Registar
+            </Button>
+          </form>
           <div className="mt-4 flex justify-center">
             <Link href="/auth/login" className="text-muted-foreground text-sm">
               Já tem uma conta? Inicie sessão
